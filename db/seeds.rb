@@ -5,3 +5,21 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+
+users_seed = [
+  {
+    name: "Applifter",
+    email: "info@applifting.cz",
+    access_token: "93f39e2f-80de-4033-99ee-249d92736a25"
+  },
+  {
+    name: "Batman",
+    email: "batman@applifting.cz",
+    access_token: "dcb20f8a-5657-4f1b-9f7f-ce65739b359e"
+  }
+]
+
+users_seed.each do |user|
+  User.create!(user)
+end
