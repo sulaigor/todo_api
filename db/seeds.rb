@@ -24,10 +24,11 @@ users_seed.each { |user| User.create!(user) }
 # Creates 3 todos for each user.
 todos_seed = []
 User.all.map { |user| user.id }.each do |id|
-  3.times do
+  3.times do |i|
     todos_seed << {
       text: Faker::Lorem.sentence,
-      user_id: id
+      user_id: id,
+      creation_date: Date.today - i.day
     }
   end
 end
