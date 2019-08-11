@@ -6,7 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-
+# Creates 2 user with unique access_token and email.
 users_seed = [
   {
     name: "Applifter",
@@ -19,7 +19,16 @@ users_seed = [
     access_token: "dcb20f8a-5657-4f1b-9f7f-ce65739b359e"
   }
 ]
+users_seed.each { |user| User.create!(user) }
 
-users_seed.each do |user|
-  User.create!(user)
+# Creates 3 todos for each user.
+todos_seed = []
+User.all.map { |user| user.id }.each do |id|
+  3.times do
+    todos_seed << {
+      text: Faker::Lorem.sentence,
+      user_id: id
+    }
+  end
 end
+todos_seed.each { |todo| Todo.create!(todo) }
