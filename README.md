@@ -18,4 +18,6 @@ API endpoints:
     POST    /user       Creates new user and returns his access token
     PUT     /user       Updates current user
     DELETE  /user       Deletes current user
+    
+For API requesting use for example: curl -H "authorization: <access_token>" <server_url>
       
