@@ -9,7 +9,7 @@ class User < ApplicationRecord
   private
 
   def set_uuid
-    self.access_token = UUID.generate
+    self.access_token = UUID.generate unless self.access_token.present?
   end
 
 end
