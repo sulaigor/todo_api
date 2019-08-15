@@ -1,25 +1,26 @@
 module TodoHelper
 
-  def self.json_response(object)
+  def self.json_response(object, params = nil)
     if object.kind_of?(Array)
       arr = []
-      object.map do |item|
-        item = TodoHelper.get_response_item(item)
+      object.map.with_index do |item, i|
+        item = TodoHelper.get_response_item(item, i + 1)
         arr << item
       end
       arr
     else
-      TodoHelper.get_response_item(object)
+      TodoHelper.get_response_item(object, params[:id])
     end
   end
 
   private
 
-  def self.get_response_item(item)
+  def self.get_response_item(item, order)
     {
+      order: order,
       text: item.text,
-      done: item.marked_done ? 'yes' : 'no',
-      date: item.creation_date.strftime("%Y-%m-%d")
+      done: item.marked,
+      date: item.date
     }
   end
 

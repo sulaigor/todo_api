@@ -1,8 +1,7 @@
 class TodoController < ApplicationController
 
-  before_action :set_todo, only: [:show, :update, :destroy]
+  before_action :bad_params_id, :set_todo, only: [:show, :update, :destroy]
 
-  # GET /todo
   def index
     @todos = Todo.where(user_id: current_user.id).order(:creation_date)
 
@@ -16,17 +15,15 @@ class TodoController < ApplicationController
     end
   end
 
-  # GET /todo/:id
   def show
     if @todo.present?
-      render json: TodoHelper.json_response(@todo)
+      render json: TodoHelper.json_response(@todo, params)
     else
       not_matched_response
     end
 
   end
 
-  # POST /todo
   def create
     create_params = todo_params
     create_params[:user_id] = current_user.id
@@ -34,17 +31,20 @@ class TodoController < ApplicationController
 
     render json: {
       id: 'todo_item_created',
-      message: "Todo with id: #{@todo.id} was succesfully created."
+      message: "Todo with date #{@todo.date} was succesfully created.",
+      todo_date: @todo.date,
+      todo_text: @todo.text,
     }
   end
 
-  # PUT /todo/:id
   def update
     if @todo.present?
       @todo.update(todo_params)
       render json: {
         id: 'todo_item_updated',
-        message: "Todo with id: #{@todo.id} was succesfully updated."
+        message: "Todo with date #{@todo.date} was succesfully updated.",
+        todo_date: @todo.date,
+        todo_text: @todo.text,
       }
     else
       not_matched_response
@@ -52,13 +52,14 @@ class TodoController < ApplicationController
 
   end
 
-  # DELETE /todo/:id
   def destroy
     if @todo.present?
       @todo.destroy
       render json: {
         id: 'todo_item_deleted',
-        message: "Todo with id: #{@todo.id} was succesfully destroyed."
+        message: "Todo with date #{@todo.date} was succesfully destroyed.",
+        todo_date: @todo.date,
+        todo_text: @todo.text,
       }
     else
       not_matched_response
@@ -72,7 +73,7 @@ class TodoController < ApplicationController
   end
 
   def set_todo
-    @todo = Todo.find_by(id: params[:id], user_id: current_user.id)
+    @todo = Todo.where(user_id: current_user.id).order(:creation_date)[params[:id].to_i - 1]
   end
 
   def not_matched_response
@@ -80,6 +81,15 @@ class TodoController < ApplicationController
       id: 'todo_not_matched',
       message: 'This todo does not exist.'
     }
+  end
+
+  def bad_params_id
+    if params[:id].to_i < 1
+      render json: {
+        id: 'bad_params_id',
+        message: 'Params id must be 1 or higher.'
+      }
+    end
   end
 
 end
