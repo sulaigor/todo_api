@@ -20,4 +20,6 @@ API endpoints:
     DELETE  /user       Deletes current user
     
 For API requesting use for example: curl -H "authorization: <access_token>" <server_url>
+
+Heroku url: https://blooming-oasis-62450.herokuapp.com/
       
